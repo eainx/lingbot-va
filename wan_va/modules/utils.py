@@ -16,6 +16,7 @@ def load_vae(
 ):
     vae = AutoencoderKLWan.from_pretrained(
         vae_path,
+        subfolder="vae",
         torch_dtype=torch_dtype,
     )
     return vae.to(torch_device)
@@ -28,13 +29,15 @@ def load_text_encoder(
 ):
     text_encoder = UMT5EncoderModel.from_pretrained(
         text_encoder_path,
+        subfolder="text_encoder",
         torch_dtype=torch_dtype,
     )
     return text_encoder.to(torch_device)
 
 
 def load_tokenizer(tokenizer_path, ):
-    tokenizer = T5TokenizerFast.from_pretrained(tokenizer_path, )
+    tokenizer = T5TokenizerFast.from_pretrained(tokenizer_path, 
+                                                subfolder="tokenizer")
     return tokenizer
 
 
@@ -45,6 +48,7 @@ def load_transformer(
 ):
     model = WanTransformer3DModel.from_pretrained(
         transformer_path,
+        subfolder="transformer",
         torch_dtype=torch_dtype,
     )
     return model.to(torch_device)

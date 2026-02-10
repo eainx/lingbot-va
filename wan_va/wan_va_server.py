@@ -58,27 +58,23 @@ class VA_Server:
         self.action_scheduler.set_timesteps(1000, training=True)
 
         self.vae = load_vae(
-            os.path.join(job_config.wan22_pretrained_model_name_or_path,
-                         'vae'),
+            job_config.wan22_pretrained_model_name_or_path,
             torch_dtype=self.dtype,
             torch_device=self.device,
         )
         self.streaming_vae = WanVAEStreamingWrapper(self.vae)
 
         self.tokenizer = load_tokenizer(
-            os.path.join(job_config.wan22_pretrained_model_name_or_path,
-                         'tokenizer'), )
+            job_config.wan22_pretrained_model_name_or_path)
 
         self.text_encoder = load_text_encoder(
-            os.path.join(job_config.wan22_pretrained_model_name_or_path,
-                         'text_encoder'),
+            job_config.wan22_pretrained_model_name_or_path,
             torch_dtype=self.dtype,
             torch_device=self.device,
         )
 
         self.transformer = load_transformer(
-            os.path.join(job_config.wan22_pretrained_model_name_or_path,
-                         'transformer'),
+            job_config.wan22_pretrained_model_name_or_path,
             torch_dtype=self.dtype,
             torch_device=self.device,
         )
@@ -92,8 +88,7 @@ class VA_Server:
         self.streaming_vae_half = None
         if self.env_type == 'robotwin_tshape':
             vae_half = load_vae(
-                os.path.join(job_config.wan22_pretrained_model_name_or_path,
-                             'vae'),
+                job_config.wan22_pretrained_model_name_or_path,
                 torch_dtype=self.dtype,
                 torch_device=self.device,
             )
