@@ -161,6 +161,8 @@ class WanAttention(torch.nn.Module):
                                        elementwise_affine=True)
         self.attn_caches = {} if cross_attention_dim_head is None else None
 
+        self.save_attention = False
+
     def clear_pred_cache(self, cache_name):
         if self.attn_caches is None:
             return
@@ -283,7 +285,19 @@ class WanAttention(torch.nn.Module):
             key = key_pool[:, valid]
             value = value_pool[:, valid]
 
-        hidden_states = self.attn_op(query, key, value)
+        if self.save_attention:
+            q_t = query.transpose(1, 2) # [B, H, L_q, D]
+            k_t = key.transpose(1, 2)   # [B, H, num_valid, D]
+            
+            scale = 1.0 / math.sqrt(q_t.size(-1))
+            attn_scores = torch.matmul(q_t, k_t.transpose(-2, -1)) * scale
+            attn_probs = F.softmax(attn_scores, dim=-1) # [B, H, L_q, num_valid]
+            
+            self.last_attn_map = attn_probs.detach().cpu()
+            
+            hidden_states = torch.matmul(attn_probs, value.transpose(1, 2)).transpose(1, 2)
+        else:
+            hidden_states = self.attn_op(query, key, value)
 
         if update_cache == 0:
             if kv_cache is not None and kv_cache['k'] is not None:

@@ -6,11 +6,13 @@ from .shared_config import va_shared_cfg
 va_robotwin_cfg = EasyDict(__name__='Config: VA robotwin')
 va_robotwin_cfg.update(va_shared_cfg)
 
-va_robotwin_cfg.wan22_pretrained_model_name_or_path = "robbyant/lingbot-va-posttrain-robotwin"
+va_robotwin_cfg.wan22_pretrained_model_name_or_path = "robbyant/lingbot-va-base"
+# va_robotwin_cfg.wan22_pretrained_model_name_or_path = "robbyant/lingbot-va-posttrain-robotwin"
 
 va_robotwin_cfg.attn_window = 72
 va_robotwin_cfg.frame_chunk_size = 2
 va_robotwin_cfg.env_type = 'robotwin_tshape'
+va_robotwin_cfg.attention_visualization = True
 
 va_robotwin_cfg.height = 256
 va_robotwin_cfg.width = 320
